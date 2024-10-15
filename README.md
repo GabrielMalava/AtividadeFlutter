@@ -12,8 +12,6 @@ A API utiliza o json-server para simular um backend RESTful a partir de um arqui
 
 npm i -g json-server
 
-Pana navegar até a api : 
-json-server --watch db.json
 
 Rodando a API:
 
