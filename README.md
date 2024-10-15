@@ -1,19 +1,26 @@
 Projeto API com JSON Server e Integração Mobile com Flutter
-Este repositório contém duas partes principais: uma API mock utilizando o json-server e uma integração mobile feita com Flutter. O objetivo é simular uma API backend e conectá-la a um aplicativo mobile.
+Este repositório contém duas partes principais:
+
+Backend: Simulação de uma API utilizando o JSON Server.
+Mobile: Integração da API com um aplicativo desenvolvido em Flutter.
+O objetivo é simular um backend e conectá-lo ao aplicativo mobile para realizar requisições e operações como se fosse uma API real.
 
 🖥️ Backend - API com JSON Server
-A API simula um backend utilizando o json-server, que permite a criação rápida de uma API RESTful com base em um arquivo db.json.
+A API utiliza o json-server para simular um backend RESTful a partir de um arquivo db.json.
 
-📦 Instalação
-instalar o json-server no seu sistema:
+📦 Instalação:
+
 npm i -g json-server
+
+Pana navegar até a api : 
+json-server --watch db.json
 
 Rodando a API:
 
 json-server --watch db.json
 
 📱 Mobile - Integração com Flutter
-📦 Dependências
+📦 Dependências:
 
 flutter pub add http
 
