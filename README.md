@@ -6,7 +6,7 @@ Mobile: Integração da API com um aplicativo desenvolvido em Flutter.
 O objetivo é simular um backend e conectá-lo ao aplicativo mobile para realizar requisições e operações como se fosse uma API real.
 
 🖥️ Backend - API com JSON Server
-A API utiliza o json-server para simular um backend RESTful a partir de um arquivo db.json.
+A API utiliza o json-server para simular um backend  a partir de um arquivo db.json.
 
 📦 Instalação:
 
