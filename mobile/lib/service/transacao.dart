@@ -18,103 +18,103 @@ class Transacao {
   }
 }
 
-class TransacaoService extends AbstractApi<Transacao> {
-  final String baseUrl = 'http://localhost:3000/transacoes';
+class ServicoTransacao extends AbstractApi<Transacao> {
+  final String urlBase = 'http://localhost:3000/transacoes';
 
   @override
-  Future<List<Transacao>> fetchAll() async {
+  Future<List<Transacao>> obterTodas() async {
     try {
-      final response = await http.get(Uri.parse(baseUrl));
-      if (response.statusCode == 200) {
-        List<dynamic> jsonList = json.decode(response.body);
-        return jsonList.map((json) => Transacao(
+      final resposta = await http.get(Uri.parse(urlBase));
+      if (resposta.statusCode == 200) {
+        List<dynamic> listaJson = json.decode(resposta.body);
+        return listaJson.map((json) => Transacao(
           id: json['id'],
           nome: json['nome'],
           valor: json['valor'],
         )).toList();
       } else {
-        throw Exception('Falha ao carregar transações: ${response.statusCode}');
+        throw Exception('Erro ao carregar transações: ${resposta.statusCode}');
       }
-    } catch (e) {
-      throw Exception('Erro ao buscar transações: $e');
+    } catch (erro) {
+      throw Exception('Falha ao buscar transações: $erro');
     }
   }
 
   @override
-  Future<Transacao> fetchById(String id) async {
+  Future<Transacao> obterPorId(String id) async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/$id'));
-      if (response.statusCode == 200) {
-        final json1 = json.decode(response.body);
+      final resposta = await http.get(Uri.parse('$urlBase/$id'));
+      if (resposta.statusCode == 200) {
+        final jsonResposta = json.decode(resposta.body);
         return Transacao(
-          id: json1['id'],
-          nome: json1['nome'],
-          valor: json1['valor'],
+          id: jsonResposta['id'],
+          nome: jsonResposta['nome'],
+          valor: jsonResposta['valor'],
         );
       } else {
-        throw Exception('Falha ao carregar transação: ${response.statusCode}');
+        throw Exception('Erro ao carregar transação: ${resposta.statusCode}');
       }
-    } catch (e) {
-      throw Exception('Erro ao buscar transação: $e');
+    } catch (erro) {
+      throw Exception('Falha ao buscar transação: $erro');
     }
   }
 
-@override
-Future<Transacao> create(Transacao item) async {
-  final response = await http.post(
-    Uri.parse(baseUrl),
-    headers: {'Content-Type': 'application/json'},
-    body: json.encode({
-      'nome': item.nome,
-      'valor': item.valor,
-    }),
-  );
-
-  if (response.statusCode == 201) {
-    final json1 = json.decode(response.body);
-    return Transacao(
-      id: json1['id'],
-      nome: json1['nome'],
-      valor: json1['valor'],
+  @override
+  Future<Transacao> criar(Transacao transacao) async {
+    final resposta = await http.post(
+      Uri.parse(urlBase),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'nome': transacao.nome,
+        'valor': transacao.valor,
+      }),
     );
-  } else {
-    throw Exception('Falha ao criar transação: ${response.statusCode}');
+
+    if (resposta.statusCode == 201) {
+      final jsonResposta = json.decode(resposta.body);
+      return Transacao(
+        id: jsonResposta['id'],
+        nome: jsonResposta['nome'],
+        valor: jsonResposta['valor'],
+      );
+    } else {
+      throw Exception('Erro ao criar transação: ${resposta.statusCode}');
+    }
   }
-}
 
   @override
-  Future<Transacao> update(Transacao item) async {
+  Future<Transacao> atualizar(Transacao transacao) async {
     try {
-      final response = await http.put(
-        Uri.parse('$baseUrl/${item.id}'),
+      final resposta = await http.put(
+        Uri.parse('$urlBase/${transacao.id}'),
         headers: {'Content-Type': 'application/json'},
-        body: json.encode(item.toJson()),
+        body: json.encode(transacao.toJson()),
       );
 
-      if (response.statusCode == 200) {
-        final json1 = json.decode(response.body);
+      if (resposta.statusCode == 200) {
+        final jsonResposta = json.decode(resposta.body);
         return Transacao(
-          id: json1['id'],
-          nome: json1['nome'],
-          valor: json1['valor'],
+          id: jsonResposta['id'],
+          nome: jsonResposta['nome'],
+          valor: jsonResposta['valor'],
         );
       } else {
-        throw Exception('Falha ao atualizar transação: ${response.statusCode}');
+        throw Exception('Erro ao atualizar transação: ${resposta.statusCode}');
       }
-    } catch (e) {
-      throw Exception('Erro ao atualizar transação: $e');
+    } catch (erro) {
+      throw Exception('Falha ao atualizar transação: $erro');
     }
   }
 
   @override
-  Future<void> delete(String id) async {
+  Future<void> excluir(String id) async {
     try {
-      final response = await http.delete(Uri.parse('$baseUrl/$id'));
-      if (response.statusCode != 200) {
-        throw Exception('Falha ao excluir transação: ${response.statusCode}');
+      final resposta = await http.delete(Uri.parse('$urlBase/$id'));
+      if (resposta.statusCode != 200) {
+        throw Exception('Erro ao excluir transação: ${resposta.statusCode}');
       }
-    } catch (e) {
-      throw Exception('Erro ao excluir transação: $e');
+    } catch (erro) {
+      throw Exception('Falha ao excluir transação: $erro');
     }
   }
 }
