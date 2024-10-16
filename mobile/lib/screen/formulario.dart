@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/service/transacao.dart';
 
-class TelaFormulario extends StatefulWidget {
+class FormularioTransacaoScreen extends StatefulWidget {
   final Transacao? transacao;
 
-  TelaFormulario({this.transacao});
+  FormularioTransacaoScreen({this.transacao});
 
   @override
-  _TelaFormularioState createState() => _TelaFormularioState();
+  _FormularioTransacaoScreenState createState() => _FormularioTransacaoScreenState();
 }
 
-class _TelaFormularioState extends State<TelaFormulario> {
-  final _controllerNome = TextEditingController();
-  final _controllerValor = TextEditingController();
+class _FormularioTransacaoScreenState extends State<FormularioTransacaoScreen> {
+  final TextEditingController _nomeController = TextEditingController();
+  final TextEditingController _valorController = TextEditingController();
 
   final ServicoTransacao servicoTransacao = ServicoTransacao();
 
@@ -20,14 +20,14 @@ class _TelaFormularioState extends State<TelaFormulario> {
   void initState() {
     super.initState();
     if (widget.transacao != null) {
-      _controllerNome.text = widget.transacao!.nome;
-      _controllerValor.text = widget.transacao!.valor.toString();
+      _nomeController.text = widget.transacao!.nome;
+      _valorController.text = widget.transacao!.valor.toString();
     }
   }
 
-  void _salvar() async {
-    final String nome = _controllerNome.text;
-    final double valor = double.tryParse(_controllerValor.text) ?? 0;
+  void _salvarTransacao() async {
+    final String nome = _nomeController.text;
+    final double valor = double.tryParse(_valorController.text) ?? 0;
 
     if (nome.isNotEmpty && valor > 0) {
       if (widget.transacao != null) {
@@ -49,24 +49,24 @@ class _TelaFormularioState extends State<TelaFormulario> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.transacao != null ? 'Editar Transação' : 'Adicionar Transação'),
+        title: Text(widget.transacao != null ? 'Editar Transação' : 'Nova Transação'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
-              controller: _controllerNome,
+              controller: _nomeController,
               decoration: InputDecoration(labelText: 'Nome'),
             ),
             TextField(
-              controller: _controllerValor,
+              controller: _valorController,
               decoration: InputDecoration(labelText: 'Valor'),
               keyboardType: TextInputType.number,
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _salvar,
+              onPressed: _salvarTransacao,
               child: Text(widget.transacao != null ? 'Atualizar' : 'Adicionar'),
             ),
           ],
