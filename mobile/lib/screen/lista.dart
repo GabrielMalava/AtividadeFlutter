@@ -2,57 +2,57 @@ import 'package:flutter/material.dart';
 import 'package:mobile/service/transacao.dart';
 import 'formulario.dart';
 
-class ListaScreen extends StatefulWidget {
+class TransacaoListaScreen extends StatefulWidget {
   @override
-  _ListaScreenState createState() => _ListaScreenState();
+  _TransacaoListaScreenState createState() => _TransacaoListaScreenState();
 }
 
-class _ListaScreenState extends State<ListaScreen> {
-  final TransacaoService transacaoService = TransacaoService();
-  late Future<List<Transacao>> futureTransacoes;
+class _TransacaoListaScreenState extends State<TransacaoListaScreen> {
+  final TransacaoService servicoTransacao = TransacaoService();
+  late Future<List<Transacao>> transacoesFuturas;
 
   @override
   void initState() {
     super.initState();
-    futureTransacoes = transacaoService.fetchAll();
+    transacoesFuturas = servicoTransacao.buscarTodos();
   }
 
-  void _atualizarLista() {
+  void _refreshLista() {
     setState(() {
-      futureTransacoes = transacaoService.fetchAll();
+      transacoesFuturas = servicoTransacao.buscarTodos();
     });
   }
 
-  void _excluirTransacao(String id) async {
-    await transacaoService.delete(id);
-    _atualizarLista();
+  void _removerTransacao(String id) async {
+    await servicoTransacao.deletar(id);
+    _refreshLista();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Lista de Transações'),
+        title: Text('Transações Registradas'),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => FormularioScreen())).then((_) {
-                _atualizarLista();
+                _refreshLista();
               });
             },
           ),
         ],
       ),
       body: FutureBuilder<List<Transacao>>(
-        future: futureTransacoes,
+        future: transacoesFuturas,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Erro ao carregar transações'));
+            return Center(child: Text('Falha ao carregar as transações.'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('Nenhuma transação cadastrada.'));
+            return Center(child: Text('Nenhuma transação encontrada.'));
           }
 
           final transacoes = snapshot.data!;
@@ -69,20 +69,20 @@ class _ListaScreenState extends State<ListaScreen> {
                   children: [
                     IconButton(
                       icon: Icon(Icons.edit),
-                       onPressed: () {
+                      onPressed: () {
                         Navigator.push(
-                         context,
+                          context,
                           MaterialPageRoute(
                             builder: (context) => FormularioScreen(transacao: transacao),
-                              ),
-                            )..then((_) {
-                         _atualizarLista();
-                       });
-                     },
+                          ),
+                        ).then((_) {
+                          _refreshLista();
+                        });
+                      },
                     ),
                     IconButton(
                       icon: Icon(Icons.delete),
-                      onPressed: () => _excluirTransacao(transacao.id),
+                      onPressed: () => _removerTransacao(transacao.id),
                     ),
                   ],
                 ),
